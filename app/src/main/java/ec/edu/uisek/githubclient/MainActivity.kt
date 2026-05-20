@@ -18,17 +18,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            GithubClientTheme{
-                Scaffold(modifier = Modifier.fillMaxSize()){ innerPadding ->
-                    RepoList(
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+            Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                RepoList(modifier = Modifier.padding(innerPadding))
             }
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
