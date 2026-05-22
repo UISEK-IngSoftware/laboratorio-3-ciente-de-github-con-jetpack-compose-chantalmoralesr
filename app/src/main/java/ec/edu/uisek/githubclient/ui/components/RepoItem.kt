@@ -23,7 +23,7 @@ import ec.edu.uisek.githubclient.models.GithubUser
 import ec.edu.uisek.githubclient.models.Repository
 
 @Composable
-fun RepoItem (
+fun RepoItem(
     repository: Repository
 ) {
     Card(
@@ -53,7 +53,8 @@ fun RepoItem (
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = repository.description?.let { "Descripción: $it" } ?: "Descripción no disponible",
+                    text = repository.description?.let { "Descripción: $it" }
+                        ?: "Descripción no disponible",
                     style = MaterialTheme.typography.bodyMedium,
                     maxLines = 3
                 )
@@ -70,7 +71,7 @@ fun RepoItem (
 @Preview(showBackground = true)
 @Composable
 fun RepoItemPreview() {
-    val repository = Repository (
+    val repository = Repository(
         id = "1",
         name = "Repo Name",
         owner = GithubUser(

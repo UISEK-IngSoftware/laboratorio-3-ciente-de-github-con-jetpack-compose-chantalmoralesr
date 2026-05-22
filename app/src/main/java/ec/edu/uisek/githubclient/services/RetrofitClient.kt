@@ -15,7 +15,7 @@ object RetrofitClient {
     }
 
     private val httpClient = OkHttpClient.Builder()
-        .addInterceptor (logging)
+        .addInterceptor(logging)
         .addInterceptor { chain ->
             val token = BuildConfig.GITHUB_TOKEN
             println("Token es vacío? ${token.isEmpty()}")

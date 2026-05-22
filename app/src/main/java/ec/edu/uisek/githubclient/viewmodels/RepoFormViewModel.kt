@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class RepoFormViewModel: ViewModel() {
+class RepoFormViewModel : ViewModel() {
     private val apiService = RetrofitClient.apiService
 
     private val _isLoading = MutableStateFlow(value = false)
@@ -21,15 +21,15 @@ class RepoFormViewModel: ViewModel() {
     private val _isSucces = MutableStateFlow(true)
     val isSuccess: StateFlow<Boolean> = _isSucces.asStateFlow()
 
-    fun createRepo(name: String, description: String){
+    fun createRepo(name: String, description: String) {
         viewModelScope.launch {
             _isLoading.value = true
             _errorMsg.value = null
-            try{
+            try {
                 val repository = RepositoryPayload(name, description)
                 apiService.createRepository(repository)
                 _isSucces.value = true
-            } catch ( e: Exception){
+            } catch (e: Exception) {
                 _errorMsg.value = "Error al crear el repositorio: ${e.message}"
             } finally {
                 _isLoading.value = false
@@ -37,7 +37,7 @@ class RepoFormViewModel: ViewModel() {
         }
     }
 
-    fun resetSuccess(){
+    fun resetSuccess() {
         _isSucces.value = false
     }
 

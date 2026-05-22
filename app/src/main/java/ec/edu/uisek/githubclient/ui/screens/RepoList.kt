@@ -31,24 +31,25 @@ import ec.edu.uisek.githubclient.viewmodels.RepoListViewModel
 fun RepoList(
     modifier: Modifier = Modifier,
     viewModel: RepoListViewModel = viewModel(),
-    onNavigateToForm:()-> Unit = {}
+    onNavigateToForm: () -> Unit = {}
 ) {
     val repos by viewModel.repos.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     Scaffold(
-        floatingActionButton ={
+        floatingActionButton = {
             FloatingActionButton(
-            onClick = onNavigateToForm,
-            shape = CircleShape,
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-            elevation = FloatingActionButtonDefaults.elevation(8.dp)
-        ){
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = "Agregar"
-            )
-        }}
+                onClick = onNavigateToForm,
+                shape = CircleShape,
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                elevation = FloatingActionButtonDefaults.elevation(8.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Agregar"
+                )
+            }
+        }
 
 
     )
@@ -71,9 +72,10 @@ fun RepoList(
     }
 
 }
+
 @Preview(showBackground = true)
 @Composable
-fun RepoListPreview(){
+fun RepoListPreview() {
     GithubClientTheme {
         RepoList()
     }

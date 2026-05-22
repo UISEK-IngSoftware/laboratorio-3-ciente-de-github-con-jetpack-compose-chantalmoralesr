@@ -38,11 +38,11 @@ import ec.edu.uisek.githubclient.viewmodels.RepoFormViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RepoForm (
+fun RepoForm(
     onBackClick: () -> Unit = {},
     onSaveSuccess: () -> Unit = {},
     viewModel: RepoFormViewModel = viewModel()
-){
+) {
     val isLoading by viewModel.isLoading.collectAsState()
     val isSuccess by viewModel.isSuccess.collectAsState()
     val errorMsg by viewModel.errorMsg.collectAsState()
@@ -51,32 +51,31 @@ fun RepoForm (
     var description by remember { mutableStateOf("") }
 
     LaunchedEffect(isSuccess) {
-        if(isSuccess){
+        if (isSuccess) {
             onSaveSuccess()
             viewModel.resetSuccess()
         }
     }
 
     Scaffold(
-       topBar = {
-           TopAppBar(
-               title = { Text("Nuevo Repositorio") },
-               navigationIcon = {
-                   IconButton(onClick = onBackClick) {
-                       Icon(
-                           imageVector = Icons.Default.ArrowBack,
-                           contentDescription = "Regresar"
-                       )
-                   }
-               },
+        topBar = {
+            TopAppBar(
+                title = { Text("Nuevo Repositorio") },
+                navigationIcon = {
+                    IconButton(onClick = onBackClick) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Regresar"
+                        )
+                    }
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
-           )
-        )
-       }
-    ) {
-        paddingValues ->
+                )
+            )
+        }
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -87,22 +86,22 @@ fun RepoForm (
         ) {
             OutlinedTextField(
                 value = name,
-                onValueChange = {name = it},
-                label ={ Text("Nombre del repositorio")},
+                onValueChange = { name = it },
+                label = { Text("Nombre del repositorio") },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true
             )
             Spacer(modifier = Modifier.height(16.dp))
             OutlinedTextField(
                 value = description,
-                onValueChange = {description = it},
-                label ={ Text("Descripción del repositorio (opcional)")},
+                onValueChange = { description = it },
+                label = { Text("Descripción del repositorio (opcional)") },
                 modifier = Modifier.fillMaxWidth(),
                 minLines = 3
             )
             Spacer(modifier = Modifier.height(16.dp))
             Button(
-                onClick = {viewModel.createRepo(name,description)},
+                onClick = { viewModel.createRepo(name, description) },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = name.isNotBlank()
             ) {
@@ -119,7 +118,7 @@ fun RepoForm (
 
 @Preview(showBackground = true)
 @Composable
-fun RepoFormPreview(){
+fun RepoFormPreview() {
     GithubClientTheme(dynamicColor = true) {
         RepoForm()
     }
