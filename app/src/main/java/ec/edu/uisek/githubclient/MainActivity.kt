@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import ec.edu.uisek.githubclient.models.Repository
 import ec.edu.uisek.githubclient.ui.screens.RepoForm
 import ec.edu.uisek.githubclient.ui.screens.RepoList
 import ec.edu.uisek.githubclient.ui.theme.GithubClientTheme
@@ -21,20 +22,26 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            GithubClientTheme{
+            GithubClientTheme {
                 val listViewModel: RepoListViewModel = viewModel()
+                var selectedRepo by remember { mutableStateOf<Repository?>(null) }
                 var currentScreen by remember { mutableStateOf("repoList") }
-                when (currentScreen){
+                when (currentScreen) {
                     "repoList" -> RepoList(
-                        onNavigateToForm = {
+                        viewModel = listViewModel,
+                        onNavigateToForm = { repo ->
+                            selectedRepo = repo
                             currentScreen = "repoForm"
+
                         }
                     )
+
                     "repoForm" -> RepoForm(
-                        onBackClick = {currentScreen = "repoList"},
+                        repository = selectedRepo,
+                        onBackClick = { currentScreen = "repoList" },
                         onSaveSuccess = {
                             listViewModel.fetchRepos()
-                            currentScreen= "repoList"
+                            currentScreen = "repoList"
                         }
                     )
                 }

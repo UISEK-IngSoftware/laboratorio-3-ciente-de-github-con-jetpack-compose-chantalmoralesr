@@ -33,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import ec.edu.uisek.githubclient.models.Repository
 import ec.edu.uisek.githubclient.ui.theme.GithubClientTheme
 import ec.edu.uisek.githubclient.viewmodels.RepoFormViewModel
 
@@ -41,14 +42,15 @@ import ec.edu.uisek.githubclient.viewmodels.RepoFormViewModel
 fun RepoForm(
     onBackClick: () -> Unit = {},
     onSaveSuccess: () -> Unit = {},
-    viewModel: RepoFormViewModel = viewModel()
+    viewModel: RepoFormViewModel = viewModel(),
+    repository: Repository? = null,
 ) {
     val isLoading by viewModel.isLoading.collectAsState()
     val isSuccess by viewModel.isSuccess.collectAsState()
     val errorMsg by viewModel.errorMsg.collectAsState()
 
-    var name by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf(repository?.name ?: "") }
+    var description by remember { mutableStateOf(repository?.description ?: "") }
 
     LaunchedEffect(isSuccess) {
         if (isSuccess) {
@@ -60,7 +62,7 @@ fun RepoForm(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Nuevo Repositorio") },
+                title = { Text(if (repository == null) "Nuevo Repositorio" else "Editar Repositorio") },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(
@@ -101,16 +103,25 @@ fun RepoForm(
             )
             Spacer(modifier = Modifier.height(16.dp))
             Button(
-                onClick = { viewModel.createRepo(name, description) },
+                onClick = {
+                    if (repository == null) {
+                        viewModel.createRepo(name, description)
+                    } else {
+                        viewModel.updateRepo(repository.owner.name, repository.name, name, description)
+                    }
+                },
                 modifier = Modifier.fillMaxWidth(),
-                enabled = name.isNotBlank()
+                enabled = name.isNotBlank() && !isLoading
             ) {
                 Icon(
                     imageVector = Icons.Default.CheckCircle,
                     contentDescription = "Guardar"
                 )
                 Spacer(Modifier.width(8.dp))
-                Text("Guardar")
+                Text(if (isLoading) "Procesando..." else "Guardar")
+            }
+            if (errorMsg != null) {
+                Text(text = errorMsg!!, color = MaterialTheme.colorScheme.error, modifier = Modifier.padding(top = 8.dp))
             }
         }
     }

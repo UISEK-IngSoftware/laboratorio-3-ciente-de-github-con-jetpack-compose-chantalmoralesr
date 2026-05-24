@@ -23,7 +23,6 @@ class RepoListViewModel : ViewModel() {
         fetchRepos()
     }
 
-
     fun fetchRepos() {
         viewModelScope.launch {
             _isLoading.value = true
@@ -34,6 +33,18 @@ class RepoListViewModel : ViewModel() {
                 _errorMsg.value = "Error Al cargar los repositorios"
             } finally {
                 _isLoading.value = false
+            }
+        }
+    }
+
+    // Eliminar un repositorio
+    fun deleteRepo(owner: String, repoName: String) {
+        viewModelScope.launch {
+            try {
+                RetrofitClient.apiService.deleteRepository(owner, repoName)
+                fetchRepos()
+            } catch (e: Exception) {
+                _errorMsg.value = "Error al eliminar el repositorio: ${e.message}"
             }
         }
     }

@@ -18,8 +18,8 @@ class RepoFormViewModel : ViewModel() {
     private val _errorMsg = MutableStateFlow<String?>(value = null)
     val errorMsg: StateFlow<String?> = _errorMsg.asStateFlow()
 
-    private val _isSucces = MutableStateFlow(true)
-    val isSuccess: StateFlow<Boolean> = _isSucces.asStateFlow()
+    private val _isSuccess = MutableStateFlow(false)
+    val isSuccess: StateFlow<Boolean> = _isSuccess.asStateFlow()
 
     fun createRepo(name: String, description: String) {
         viewModelScope.launch {
@@ -28,7 +28,7 @@ class RepoFormViewModel : ViewModel() {
             try {
                 val repository = RepositoryPayload(name, description)
                 apiService.createRepository(repository)
-                _isSucces.value = true
+                _isSuccess.value = true
             } catch (e: Exception) {
                 _errorMsg.value = "Error al crear el repositorio: ${e.message}"
             } finally {
@@ -38,7 +38,24 @@ class RepoFormViewModel : ViewModel() {
     }
 
     fun resetSuccess() {
-        _isSucces.value = false
+        _isSuccess.value = false
+    }
+
+    // Actualizar un repositorio
+    fun updateRepo(owner: String, repoName: String, newName: String, description: String?) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            _errorMsg.value = null
+            try {
+                val payload = RepositoryPayload(newName, description)
+                apiService.updateRepository(owner, repoName, payload)
+                _isSuccess.value = true
+            } catch (e: Exception) {
+                _errorMsg.value = "Error al actualizar el repositorio: ${e.message}"
+            } finally {
+                _isLoading.value = false
+            }
+        }
     }
 
 }
